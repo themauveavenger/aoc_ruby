@@ -1,39 +1,19 @@
 # frozen_string_literal: true
 
-def part_1
-  lines = File.readlines('./2022/day01/input.txt', chomp: true)
+# @return [Array<Integer>]
+def totals
+  all_elves = File.read("./2022/day01/input.txt").split("\n\n")
 
-  total = 0
-  max = 0
-  lines.each do |line|
-    if line == ''
-      max = total if max < total
-      total = 0
-    else
-      total += line.to_i
-    end
+  all_elves.map do |elf|
+    elf.split("\n").map(&:to_i).sum
   end
-
-  max
+end
+def part_1
+  totals.max
 end
 
 def part_2
-  lines = File.readlines('./2022/day01/input.txt', chomp: true)
-
-  # @type [Array<Integer>]
-  totals = []
-
-  total = 0
-  lines.each do |line|
-    if line == ''
-      totals.push(total)
-      total = 0
-    else
-      total += line.to_i
-    end
-  end
-
-  totals.sort { |a, b| b <=> a }.take(3).sum
+  totals.max(3).sum
 end
 
 p part_1
