@@ -11,7 +11,7 @@ class String
     if self.lower?
       self.ord - 96
     else
-      self .ord - 38
+      self.ord - 38
     end
   end
 end
