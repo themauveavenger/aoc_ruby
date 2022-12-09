@@ -34,11 +34,10 @@ end
 def find_tree_score(current, trees)
   ind = trees.find_index { |t| t >= current }
   if ind.nil?
-    score = trees.length
+    trees.length
   else
-    score = ind + 1
+    ind + 1
   end
-  score
 end
 
 def part_2
