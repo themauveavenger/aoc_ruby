@@ -48,20 +48,20 @@ class Directory
   end
 
   def file_exists?(name)
-    @files.find {|f| f.name == name }
+    @files.find { |f| f.name == name }
   end
 
   # directory size is the sum of its files + all directories it contains
   # @return [Integer]
   def size
-    directory_size = @directories.map {|name, dir| dir.size }.sum
+    directory_size = @directories.map { |name, dir| dir.size }.sum
     # directory_size = @directories.map(&:size).sum
     file_size = @files.map(&:size).sum
     file_size + directory_size
   end
 end
 
-SIZE_CAP = 100000
+SIZE_CAP = 100_000
 
 class Calculator
   attr_accessor :total, :sizes
@@ -73,14 +73,12 @@ class Calculator
 
   def find_size(root)
     sz = root.size
-    if sz <= SIZE_CAP
-      @total += sz
-    end
+    @total += sz if sz <= SIZE_CAP
 
-    unless root.directories.empty?
-      root.directories.each_value do |d|
-        find_size(d)
-      end
+    return if root.directories.empty?
+
+    root.directories.each_value do |d|
+      find_size(d)
     end
   end
 
@@ -110,14 +108,10 @@ def load_root
 
     # @type [MatchData]
     dir_to_add = /dir (\w+)/.match(line) # add this dir to the cwd if it doesn't exist, when adding dir, set cwd as the parent
-    if dir_to_add && dir_to_add[1]
-      current_directory.add_directory(dir_to_add[1], current_directory)
-    end
+    current_directory.add_directory(dir_to_add[1], current_directory) if dir_to_add && dir_to_add[1]
 
     file_to_add = /(\d+) (\w+)/.match(line) # add this file to the cwd if it doesn't exist
-    if file_to_add && file_to_add[1] && file_to_add[2]
-      current_directory.add_file(file_to_add[2], file_to_add[1].to_i)
-    end
+    current_directory.add_file(file_to_add[2], file_to_add[1].to_i) if file_to_add && file_to_add[1] && file_to_add[2]
 
     change_dir = /\$ cd (.*)/.match(line) # change cwd to the specified directory
     if change_dir && change_dir[1]
@@ -131,6 +125,7 @@ def load_root
   end
   root
 end
+
 def part_1
   root = load_root
 
@@ -142,15 +137,15 @@ end
 def part_2
   root = load_root
 
-  total_size = 70000000
+  total_size = 70_000_000
   total_used_space = root.size
   unused_space = total_size - total_used_space
-  required_space = 30000000
+  required_space = 30_000_000
 
   c = Calculator.new
   sizes = c.get_all_directory_sizes(root)
   diff = required_space - unused_space
-  sizes.filter {|s| s >= diff}.first
+  sizes.filter { |s| s >= diff }.first
 end
 
 p part_1

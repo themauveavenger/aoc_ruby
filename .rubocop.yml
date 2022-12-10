@@ -1,0 +1,8 @@
+Metrics/MethodLength:
+  Enabled: false
+
+Layout/EndOfLine:
+  Enabled: false
+
+Naming/VariableNumber:
+  Enabled: false
